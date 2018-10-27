@@ -1,3 +1,4 @@
+const css = require('react-emotion').css;
 const RenderLoop = require('./RenderLoop');
 const Timer = require('./Timer');
 const runShellCommand = require('./runShellCommand');
@@ -13,10 +14,10 @@ const defaults = {
   render: function render(props) {
     return html('div', null, props.error ? String(props.error) : props.output );
   },
-  updateState: function updateState(action) {
-    return { error: action.error, output: action.output };
+  updateState: function updateState(event) {
+    return { error: event.error, output: event.output };
   },
-  initialState: { output: '', error: null },
+  initialState: { output: '' },
 };
 
 module.exports = function VirtualDomWidget(widgetObject) {
@@ -84,9 +85,9 @@ module.exports = function VirtualDomWidget(widgetObject) {
       return Promise.resolve();
   }
 
-  function dispatch(action) {
+  function dispatch(event) {
     try {
-      const nextState = implementation.updateState(action, renderLoop.state);
+      const nextState = implementation.updateState(event, renderLoop.state);
       renderLoop.update(nextState);
     } catch (err) {
       handleError(err);
@@ -126,7 +127,7 @@ module.exports = function VirtualDomWidget(widgetObject) {
     contentEl.id = implementation.id;
     contentEl.classList.add('widget');
     if (implementation.className) {
-      contentEl.classList.add(implementation.className);
+      contentEl.classList.add(css(implementation.className));
     }
     document.body.appendChild(contentEl);
     start();
@@ -145,10 +146,10 @@ module.exports = function VirtualDomWidget(widgetObject) {
 
   api.update = function update(newImplementation) {
     commandLoop && commandLoop.stop();
-    contentEl.classList.remove(implementation.className);
+    contentEl.classList.remove(css(implementation.className));
     init(newImplementation);
     if (implementation.className) {
-      contentEl.classList.add(implementation.className);
+      contentEl.classList.add(css(implementation.className));
     }
     start();
   };
