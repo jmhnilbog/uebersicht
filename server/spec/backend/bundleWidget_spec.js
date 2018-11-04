@@ -5,7 +5,7 @@ const bundleWidget = require('../../src/bundleWidget');
 const testDir = path.resolve(__dirname, path.join('..', 'test_widgets'));
 
 test('bundling coffeescript widgets', (t) => {
-  const widgetPath = path.join(testDir, 'widget-1.coffee');
+  const widgetPath = path.join(testDir, 'widget-1');
   const bundle = bundleWidget('widget-id', widgetPath);
 
   t.plan(2);

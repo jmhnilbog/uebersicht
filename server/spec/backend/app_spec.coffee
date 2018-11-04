@@ -4,7 +4,7 @@ fs = require 'fs'
 httpGet = require '../helpers/httpGet'
 httpPost = require '../helpers/httpPost'
 
-Server = require '../../src/app.coffee'
+Server = require '../../src/app'
 server = Server(3030, '../spec/test_widgets', '../spec/test_files')
 host = 'localhost:3030'
 
@@ -113,7 +113,8 @@ test 'when a login shell option is provided', (t) ->
     "http://#{host}/run/",
     "echo $(shopt | grep login_shell)",
     (res, body) ->
-      t.equal(body, 'login_shell on\n', 'it indeed runs in a login shell')
+      console.log('BODY\n', body)
+      t.ok(-1 != body.indexOf('login_shell on\n'), 'it indeed runs in a login shell')
       server.close()
       t.end()
   )

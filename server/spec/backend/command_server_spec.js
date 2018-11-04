@@ -4,7 +4,7 @@ var path = require('path');
 
 var httpGet = require('../helpers/httpGet');
 var httpPost = require('../helpers/httpPost');
-var commandServer = require('../../src/command_server.coffee');
+var commandServer = require('../../src/command_server');
 
 var workingDir = path.resolve(__dirname, path.join('..', 'test_widgets'));
 var server = connect()
@@ -86,7 +86,7 @@ test('using a login shell', (t) => {
     .listen(8887);
 
   httpPost(url, 'echo $(shopt | grep login_shell)', (res, body) => {
-    t.equal(body, 'login_shell on\n', 'it indeed runs in a login shell');
+    t.ok(-1 != body.indexOf('login_shell on\n'), 'it indeed runs in a login shell');
     server.close();
     t.end();
   });
